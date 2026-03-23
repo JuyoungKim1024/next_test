@@ -2,9 +2,11 @@
 import { supabase } from '@/src/lib/supabase'
 import { User } from '@supabase/supabase-js'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function Nav() {
+  const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
 
   const fetchUser = async () => {
@@ -32,6 +34,7 @@ export default function Nav() {
       console.error('Error signing out:', error)
     } else {
       alert('로그아웃이 완료되었습니다.')
+      router.push('/signin')
     }
   }
   return (
@@ -43,12 +46,15 @@ export default function Nav() {
         글목록
       </Link>
       {user ? (
-        <button
-          onClick={handleLogout}
-          className="p-2 rounded hover:bg-gray-200"
-        >
-          로그아웃
-        </button>
+        <>
+          <span className="p-2 rounded hover:bg-gray-200">{user.email}</span>
+          <button
+            onClick={handleLogout}
+            className="p-2 rounded hover:bg-gray-200"
+          >
+            로그아웃
+          </button>
+        </>
       ) : (
         <>
           <Link href="/signup" className="p-2 rounded hover:bg-gray-200">

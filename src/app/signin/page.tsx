@@ -1,7 +1,9 @@
 'use client'
 import { supabase } from '@/src/lib/supabase'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 export default function SignIn() {
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -16,6 +18,7 @@ export default function SignIn() {
       console.error('Error signing in:', error)
     } else {
       alert('로그인이 완료되었습니다.')
+      router.push('/')
     }
   }
   return (

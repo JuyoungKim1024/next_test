@@ -18,7 +18,7 @@ export default function SignIn() {
     }
   }
   return (
-    <form className="flex flex-col gap-2 item-starts" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-2 items-start" onSubmit={handleSubmit}>
       <input
         type="email"
         name="email"

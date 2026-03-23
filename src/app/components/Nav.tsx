@@ -1,6 +1,30 @@
+'use client'
+import { supabase } from '@/src/lib/supabase'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 export default function Nav() {
+  const [user, setUser] = useState()
+
+  const fetchUser = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    setUser(user)
+  }
+
+  useEffect(() => {
+    fetchUser()
+  }, [])
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+      console.error('Error signing out:', error)
+    } else {
+      alert('로그아웃이 완료되었습니다.')
+    }
+  }
   return (
     <nav className="flex">
       <Link href="/" className="p-2 rounded hover:bg-gray-200">
@@ -9,12 +33,23 @@ export default function Nav() {
       <Link href="/posts" className="p-2 rounded hover:bg-gray-200">
         글목록
       </Link>
-      <Link href="/signup" className="p-2 rounded hover:bg-gray-200">
-        회원가입
-      </Link>
-      <Link href="/signin" className="p-2 rounded hover:bg-gray-200">
-        로그인
-      </Link>
+      {user ? (
+        <button
+          onClick={handleLogout}
+          className="p-2 rounded hover:bg-gray-200"
+        >
+          로그아웃
+        </button>
+      ) : (
+        <>
+          <Link href="/signup" className="p-2 rounded hover:bg-gray-200">
+            회원가입
+          </Link>
+          <Link href="/signin" className="p-2 rounded hover:bg-gray-200">
+            로그인
+          </Link>
+        </>
+      )}
     </nav>
   )
 }

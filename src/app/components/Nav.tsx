@@ -1,10 +1,11 @@
 'use client'
 import { supabase } from '@/src/lib/supabase'
+import { User } from '@supabase/supabase-js'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 export default function Nav() {
-  const [user, setUser] = useState()
+  const [user, setUser] = useState<User | null>(null)
 
   const fetchUser = async () => {
     const {
@@ -15,6 +16,14 @@ export default function Nav() {
 
   useEffect(() => {
     fetchUser()
+
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null)
+
+      return () => {
+        data.subscription.unsubscribe()
+      }
+    })
   }, [])
 
   const handleLogout = async () => {

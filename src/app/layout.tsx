@@ -33,7 +33,7 @@ export default function RootLayout({
           <Nav />
         </header>
         {children}
-        <footer className="p-2">풋터</footer>
+        <footer className="p-2">연습</footer>
       </body>
     </html>
   )
